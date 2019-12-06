@@ -1,8 +1,8 @@
-<div>
+<!-- <div>
     <mat-form-field>
         <input matInput class="form-field" [formControl]="categoryFilter" placeholder="Categoria">
     </mat-form-field>
-</div>
+</div> -->
 
 <div>
     <mat-form-field>
@@ -10,7 +10,16 @@
     </mat-form-field>
 </div>
 
-
+<div class="input-group mb-5">
+    <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">Opciones</label>
+    </div>
+    <select [formControl]="categoryFilter" class="custom-select" id="inputGroupSelect01">
+    <option selected></option>
+    <option value="personas">personas</option>
+    <option value="elementos">elementos</option>
+  </select>
+</div>
 
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
