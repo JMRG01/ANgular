@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 
 export interface PeriodicElement {
@@ -33,36 +34,58 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./app.component.css']
 })
 
-export class TableFilteringExample {
-  displayedColumns: string[] = ['position','name','weight','category'];
+export class TableFilteringExample implements OnInit {
+  displayedColumns: string[] = ['position', 'name', 'weight', 'category'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
 
+  categoryFilter = new FormControl();
+  nameFilter = new FormControl();
+  globalFilter = '';
 
-// applyFilter(filterValue: string) {
-//   this.dataSource.filterPredicate = (data , filter: string) => {
-//     return data.category == filter;
-//    };
-//   this.dataSource.filter = filterValue.trim().toLowerCase();
+  filteredValues = {
+    position: '', name: '', weight: '',
+    category: ''
+  };
+  ngOnInit() {
 
-//   console.log(filterValue.trim().toLowerCase());
-// }
+    this.categoryFilter.valueChanges.subscribe((positionFilterValue) => {
+      this.filteredValues['category'] = positionFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+      console.log(this.dataSource.filter);
+    });
+
+    this.nameFilter.valueChanges.subscribe((nameFilterValue) => {
+      this.filteredValues['name'] = nameFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+
+    this.dataSource.filterPredicate = this.customFilterPredicate();
 
 
+  }
 
+  applyFilter(filter) {
+    this.globalFilter = filter;
+    this.dataSource.filter = JSON.stringify(this.filteredValues);
+  }
 
-applyFilter(filterValue: string) {
-  this.dataSource.filterPredicate = (data:
-    { category: string }, filterValue: string) =>
-    data.category.trim().toLowerCase().indexOf(filterValue) !== -1;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  customFilterPredicate() {
+    const myFilterPredicate = (data: PeriodicElement, filter: string): boolean => {
+      var globalMatch = !this.globalFilter;
+
+      if (this.globalFilter) {
+        // search all text fields
+        globalMatch = data.name.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1;
+      }
+
+      if (!globalMatch) {
+        return;
+      }
+
+      let searchString = JSON.parse(filter);
+      return data.category.toString().trim().indexOf(searchString.category) !== -1 &&
+        data.name.toString().trim().toLowerCase().indexOf(searchString.name.toLowerCase()) !== -1;
+    }
+    return myFilterPredicate;
+  }
 }
-
-applyFilterName(filterValue: string) {
-  this.dataSource.filterPredicate = (data:
-    {name: string}, filterValue: string) =>
-    data.name.trim().toLowerCase().indexOf(filterValue) !== -1;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-}
-
-}
-
