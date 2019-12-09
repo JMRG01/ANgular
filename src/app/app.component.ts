@@ -4,28 +4,28 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 
 export interface PeriodicElement {
-  name?: string;
   position?: number;
-  weight?: number;
-  category?: string;
+  name?: string;
+  age?: number;
+  city?: string;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Ivan', weight: 1.0079, category: 'personas'},
-  {position: 2, name: 'Hector', weight: 4.0026, category: 'personas'},
-  {position: 3, name: 'Kristian', weight: 6.941, category: 'personas'},
-  {position: 4, name: 'Isac', weight: 9.0122, category: 'personas'},
-  {position: 5, name: 'Boron', weight: 10.811, category: 'elementos'},
-  {position: 6, name: 'Carbon', weight: 12.0107, category: 'elementos'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, category: 'elementos'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, category: 'elementos'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, category: 'elementos'},
-  {position: 11, name: 'jassiel', weight: 20.1797, category: 'personas'},
-  {position: 12, name: 'elvis', weight: 20.1797, category: 'personas'},
-  {position: 13, name: 'yeimi', weight: 20.1797, category: 'personas'},
-  {position: 14, name: 'isabel', weight: 20.1797, category: 'personas'},
-  {position: 15, name: 'marcelino', weight: 20.1797, category: 'personas'},
-  {position: 16, name: 'marcelino', weight: 20, category: 'elementos'},
+  {position: 1,  name: 'Ivan',      age: 35, city: 'Gutiérrez Zamora'},
+  {position: 2,  name: 'Hector',    age: 4.0026, city: 'Gutiérrez Zamora'},
+  {position: 3,  name: 'Kristian',  age: 6.941, city: 'Gutiérrez Zamora'},
+  {position: 4,  name: 'Isac',      age: 9.0122, city: 'Gutiérrez Zamora'},
+  {position: 5,  name: 'Boron',     age: 10.811, city: 'Poza Rica'},
+  {position: 6,  name: 'Carbon',    age: 12.0107, city: 'Poza Rica'},
+  {position: 7,  name: 'Nitrogen',  age: 14.0067, city: 'Poza Rica'},
+  {position: 8,  name: 'Oxygen',    age: 15.9994, city: 'Poza Rica'},
+  {position: 9,  name: 'Fluorine',  age: 18.9984, city: 'Poza Rica'},
+  {position: 11, name: 'jassiel',   age: 20.1797, city: 'Gutiérrez Zamora'},
+  {position: 12, name: 'elvis',     age: 20.1797, city: 'Gutiérrez Zamora'},
+  {position: 13, name: 'yeimi',     age: 20.1797, city: 'Gutiérrez Zamora'},
+  {position: 14, name: 'isabel',    age: 20.1797, city: 'Gutiérrez Zamora'},
+  {position: 15, name: 'marcelino', age: 20.1797, city: 'Gutiérrez Zamora'},
+  {position: 16, name: 'marcelino', age: 20, city: 'Poza Rica'},
 
 ];
 @Component({
@@ -35,21 +35,21 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 
 export class TableFilteringExample implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'category'];
+  displayedColumns: string[] = ['position', 'name', 'age', 'city'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
 
-  categoryFilter = new FormControl();
+  cityFilter = new FormControl();
   nameFilter = new FormControl();
   globalFilter = '';
 
   filteredValues = {
-    position: '', name: '', weight: '',
-    category: ''
+    position: '', name: '', age: '',
+    city: ''
   };
   ngOnInit() {
 
-    this.categoryFilter.valueChanges.subscribe((positionFilterValue) => {
-      this.filteredValues['category'] = positionFilterValue;
+    this.cityFilter.valueChanges.subscribe((positionFilterValue) => {
+      this.filteredValues['city'] = positionFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
       console.log(this.dataSource.filter);
     });
@@ -83,7 +83,7 @@ export class TableFilteringExample implements OnInit {
       }
 
       let searchString = JSON.parse(filter);
-      return data.category.toString().trim().indexOf(searchString.category) !== -1 &&
+      return data.city.toString().trim().indexOf(searchString.city) !== -1 &&
         data.name.toString().trim().toLowerCase().indexOf(searchString.name.toLowerCase()) !== -1;
     }
     return myFilterPredicate;
